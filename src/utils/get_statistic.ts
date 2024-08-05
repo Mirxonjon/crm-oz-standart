@@ -37,6 +37,9 @@ export const  getStatisticWithRegion = async (findRegions : Region_Entity[] , ca
               create_data: 'desc'
             }
           });
+
+          console.log(results ,'okkk');
+          
     
           results.forEach(item => {
             item.sub_category_orgs.forEach(subCategory => {

@@ -18,6 +18,7 @@ export class SectionCategoriesService {
     pageNumber = 1,
     pageSize = 10){
       const offset = (pageNumber - 1) * pageSize;
+
       if (fromDate == 'null' && untilDate == 'null' ) {
         const findRegions = await Region_Entity.find({
           where: {
@@ -30,63 +31,55 @@ export class SectionCategoriesService {
         
         let arr = [];
         
+        await Promise.all(
+          findRegions.map(async (e) => {
+            try {
+              const results = await Category_Section_Entity.find({
+                where: {
+                  id: categoryId == 'null' ? null : categoryId,
+                  sub_category_orgs: {
+                    id: subCategoryId == 'null' ? null : subCategoryId,
+                    applicationCallcenter: {
+                      IsDraf: 'false',
+                      districts: {
+                        region: {
+                          id: e.id
+                        }
+                      }
+                    }
+                  }
+                },
+                relations: {
+                  sub_category_orgs: {
+                    applicationCallcenter: {
+                      districts: {
+                        region: true
+                      }
+                    }
+                  }
+                },
+                order: {
+                  create_data: 'desc'
+                }
+              });
         
-        const resultsappliocation = await getStatisticWithRegion(findRegions ,categoryId ,subCategoryId, 'Ariza')
-        const resultsOffer = await getStatisticWithRegion(findRegions ,categoryId ,subCategoryId, 'Taklif')
-        const resultsComplaint = await getStatisticWithRegion(findRegions ,categoryId ,subCategoryId, 'Shikoyat')
-        arr = [ ...resultsappliocation , ...resultsOffer , ...resultsComplaint]
-
-        
-
-        // await Promise.all(
-        //   findRegions.map(async (e) => {
-        //     try {
-        //       const results = await Category_Section_Entity.find({
-        //         where: {
-        //           id: categoryId == 'null' ? null : categoryId,
-        //           sub_category_orgs: {
-        //             id: subCategoryId == 'null' ? null : subCategoryId,
-        //             applicationCallcenter: {
-        //               IsDraf: 'false',
-        //               districts: {
-        //                 region: {
-        //                   id: e.id
-        //                 }
-        //               }
-        //             }
-        //           }
-        //         },
-        //         relations: {
-        //           sub_category_orgs: {
-        //             applicationCallcenter: {
-        //               districts: {
-        //                 region: true
-        //               }
-        //             }
-        //           }
-        //         },
-        //         order: {
-        //           create_data: 'desc'
-        //         }
-        //       });
-        
-        //       results.forEach(item => {
-        //         item.sub_category_orgs.forEach(subCategory => {
-        //           arr.push({
-        //             ...item,
-        //             sub_category_orgs: {
-        //               ...subCategory,
-        //               count: subCategory.applicationCallcenter.length,
-        //               region: e
-        //             }
-        //           });
-        //         });
-        //       });
-        //     } catch (error) {
-        //       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-        //     }
-        //   })
-        // );
+              results.forEach(item => {
+                item.sub_category_orgs.forEach(subCategory => {
+                  arr.push({
+                    ...item,
+                    sub_category_orgs: {
+                      ...subCategory,
+                      count: subCategory.applicationCallcenter.length,
+                      region: e
+                    }
+                  });
+                });
+              });
+            } catch (error) {
+              throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+            }
+          })
+        );
 
        arr.sort((a, b) => b.sub_category_orgs.count - a.sub_category_orgs.count);
 
@@ -105,6 +98,71 @@ export class SectionCategoriesService {
         };
       } 
       
+    //   else if (fromDate == 'null' || untilDate == 'null') {
+
+    //     const [results, total] = await Category_Section_Entity.findAndCount({
+    //       where: {
+    //         id: categoryId == 'null' ? null : categoryId,
+    //         sub_category_orgs :{
+    //           id: subCategoryId == 'null' ? null : subCategoryId,
+    //           applicationCallcenter :{
+    //             IsDraf: 'false',
+    //             districts :{
+    //               region : {
+    //                 id: region == 'null' ? null : region,
+    //                }
+    //             }
+    //           }
+    //         }
+    //       },
+    //       relations: {
+    //        sub_category_orgs: {
+    //         applicationCallcenter: {
+    //           districts: {
+    //             region: true
+    //           },
+    //         }
+    //        },
+    //     },
+    //       skip: offset,
+    //       take: pageSize,
+    //       order: {
+    //         create_data: 'desc',
+    //       },
+    //     }).catch((e) => {
+    //       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    //     });
+
+    //     let arr = [ ]
+    // results.forEach(item  => {
+    //       item.sub_category_orgs.forEach(subCategory => {
+    //         arr.push({
+    //           ...item,
+    //           sub_category_orgs: {...subCategory,
+    //           count : subCategory.applicationCallcenter.length,
+    //            region :   subCategory.applicationCallcenter[0].districts.region
+    //       }
+    //         })
+    //       });
+    //   });
+
+    //   console.log(arr , 'okkk');
+      
+  
+    //     const totalPages = Math.ceil(total / pageSize);
+  
+    //     return {
+          
+    //       results : arr,
+    //       pagination: {
+    //         currentPage: pageNumber,
+    //         totalPages,
+    //         pageSize,
+    //         totalItems: total,
+    //       },
+    //     };
+    //   }
+      
       else {
         const fromDateFormatted = new Date(
           parseInt(fromDate.split('.')[2]),
@@ -117,74 +175,66 @@ export class SectionCategoriesService {
           parseInt(untilDate.split('.')[0]),
         );
   
-      //   const [results , total] = await Category_Section_Entity.findAndCount({
-      //     where: {
-      //       id: categoryId == 'null' ? null : categoryId,
-      //       sub_category_orgs :{
-      //         id: subCategoryId == 'null' ? null : subCategoryId,
-      //         applicationCallcenter :{
-      //           IsDraf: 'false',
-      //           districts :{
-      //             region : {
-      //               id: region == 'null' ? null : region,
-      //              }
-      //           },
-      //           create_data: Between(fromDateFormatted, untilDateFormatted),
-      //         }
-      //       }
-      //     },
-      //     relations: {
-      //      sub_category_orgs: {
-      //       applicationCallcenter: {
-      //         districts: {
-      //           region: true
-      //         },
-      //       }
-      //      },
-      //   },
-      //     skip: offset,
-      //     take: pageSize,
-      //     order: {
-      //       create_data: 'desc',
-      //     },
-      //   }).catch((e) => {
-      //     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-      //   });
-      //   let arr = [ ]
-      //   let   resultsa : any = results.forEach(item  => {
-      //     item.sub_category_orgs.forEach(subCategory => {
+        const [results , total] = await Category_Section_Entity.findAndCount({
+          where: {
+            id: categoryId == 'null' ? null : categoryId,
+            sub_category_orgs :{
+              id: subCategoryId == 'null' ? null : subCategoryId,
+              applicationCallcenter :{
+                IsDraf: 'false',
+                districts :{
+                  region : {
+                    id: region == 'null' ? null : region,
+                   }
+                },
+                create_data: Between(fromDateFormatted, untilDateFormatted),
+              }
+            }
+          },
+          relations: {
+           sub_category_orgs: {
+            applicationCallcenter: {
+              districts: {
+                region: true
+              },
+            }
+           },
+        },
+          skip: offset,
+          take: pageSize,
+          order: {
+            create_data: 'desc',
+          },
+        }).catch((e) => {
+          throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+        });
+        let arr = [ ]
+        let   resultsa : any = results.forEach(item  => {
+          item.sub_category_orgs.forEach(subCategory => {
 
-      //       arr.push({
-      //         item,
-      //         subCategory,
-      //         count : subCategory.applicationCallcenter.length 
-      //       })
-      //         // subCategory.count = subCategory.applicationCallcenter.length ;
-      //     });
-      // });
+            arr.push({
+              item,
+              subCategory,
+              count : subCategory.applicationCallcenter.length 
+            })
+              // subCategory.count = subCategory.applicationCallcenter.length ;
+          });
+      });
 
-      // console.log(arr , 'okkk');
+      console.log(arr , 'okkk');
+      
 
-      let arr = [];
-      const resultsappliocation = await getStatisticWithRegionDate(region ,categoryId ,subCategoryId, 'Ariza' , fromDateFormatted ,  untilDateFormatted)
-      const resultsOffer = await getStatisticWithRegionDate(region ,categoryId ,subCategoryId, 'Taklif' , fromDateFormatted ,  untilDateFormatted)
-      const resultsComplaint = await getStatisticWithRegionDate(region ,categoryId ,subCategoryId, 'Shikoyat' , fromDateFormatted ,  untilDateFormatted)
-      arr = [ ...resultsappliocation , ...resultsOffer , ...resultsComplaint]
-      arr.sort((a, b) => b.sub_category_orgs.count - a.sub_category_orgs.count);
-
-      const totalItems = arr.length;
-      const totalPages = Math.ceil(totalItems / pageSize);
-      const paginatedResults = arr.slice(offset, offset + pageSize);
   
-        // const totalPages = Math.ceil(total / pageSize);/
+        const totalPages = Math.ceil(total / pageSize);
   
         return {
-          results :paginatedResults,
+          arr,
+          results,
           pagination: {
             currentPage: pageNumber,
             totalPages,
             pageSize,
-            totalItems: totalItems,
+            totalItems: total,
           },
         };
       }
