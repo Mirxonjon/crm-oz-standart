@@ -471,7 +471,7 @@ async findallstatisticsfilter(
       });
     }
 
-    // const ApplicationCount =  await ApplicationCallCenterEntity.count() 
+    const ApplicationCount =  await ApplicationCallCenterEntity.count() 
 
     const createdOrg = await ApplicationCallCenterEntity.createQueryBuilder()
       .insert()
@@ -484,7 +484,7 @@ async findallstatisticsfilter(
         phone: body.phone,                                       
         // crossfields: body.crossfields,
         income_date: body.income_date,
-        incoming_number: body.incoming_number,
+        incoming_number: `UZST/${ApplicationCount+1}`,
         organization_name: body.organization_name,
         organization_type: body.organization_type,
         perform_date: body.perform_date,
@@ -564,7 +564,6 @@ async findallstatisticsfilter(
       comment: body.comment || findaplicationCallCenter.comment,
       // crossfields: body.crossfields || findaplicationCallCenter.crossfields,
       income_date: body.income_date || findaplicationCallCenter.income_date,
-      incoming_number: body.incoming_number|| findaplicationCallCenter.incoming_number,
       phone: body.phone || findaplicationCallCenter.phone, 
       organization_name:
         body.organization_name || findaplicationCallCenter.organization_name,

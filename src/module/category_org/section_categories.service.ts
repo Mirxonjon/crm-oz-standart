@@ -36,6 +36,8 @@ export class SectionCategoriesService {
         const resultsComplaint = await getStatisticWithRegion(findRegions ,categoryId ,subCategoryId, 'Shikoyat')
         arr = [ ...resultsappliocation , ...resultsOffer , ...resultsComplaint]
 
+        
+
         // await Promise.all(
         //   findRegions.map(async (e) => {
         //     try {
@@ -245,16 +247,16 @@ export class SectionCategoriesService {
         }
       })
 
-      // const ApplicationAnonymouscount = await ApplicationCallCenterEntity.count({
-      //   where : {
-      //     response : 'Аноним',
-      //     districts : {
-      //       region :{
-      //         id: regionId == 'null' ? null : regionId
-      //       }
-      //     }
-      //   }
-      // })
+      const ApplicationProvideInformation = await ApplicationCallCenterEntity.count({
+        where : {
+          application_type : `Ma'lumot berish`, 
+          districts : {
+            region :{
+              id: regionId == 'null' ? null : regionId
+            }
+          }
+        }
+      })
 
       return  {
         findRegions,
@@ -262,7 +264,7 @@ export class SectionCategoriesService {
         ApplicationTypecount,
         ApplicationTypeOffercount,
         ApplicationComplaintcount,
-        // ApplicationAnonymouscount
+        ApplicationProvideInformation
       }
     
     }else {
@@ -334,17 +336,17 @@ export class SectionCategoriesService {
           }
         })
   
-        // const ApplicationAnonymouscount = await ApplicationCallCenterEntity.count({
-        //   where : {
-        //     response : 'Аноним',
-        //     districts : {
-        //       region :{
-        //         id: regionId == 'null' ? null : regionId
-        //       }
-        //     },
-        //     create_data: Between(fromDateFormatted, untilDateFormatted),
-        //   }
-        // })
+        const ApplicationProvideInformation = await ApplicationCallCenterEntity.count({
+          where : {
+            application_type : `Ma'lumot berish`, 
+            districts : {
+              region :{
+                id: regionId == 'null' ? null : regionId
+              }
+            },
+            create_data: Between(fromDateFormatted, untilDateFormatted),
+          }
+        })
   
         return  {
           findRegions,
@@ -353,7 +355,7 @@ export class SectionCategoriesService {
           ApplicationTypecount,
           ApplicationTypeOffercount,
           ApplicationComplaintcount,
-          // ApplicationAnonymouscount
+          ApplicationProvideInformation
         }
     } 
 

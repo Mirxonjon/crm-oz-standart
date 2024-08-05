@@ -56,6 +56,8 @@ export const  getStatisticWithRegion = async (findRegions : Region_Entity[] , ca
         }
     })
     )
+    console.log(arr);
+    
 
     return arr
 }
