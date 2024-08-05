@@ -39,8 +39,6 @@ export class ApplicationCallCenterController {
   readonly #_service: ApplicationCallCenterServise;
   constructor(service: ApplicationCallCenterServise) {
     this.#_service = service;
-
-    
   }
 
   @Get('/statistics/filter?')
