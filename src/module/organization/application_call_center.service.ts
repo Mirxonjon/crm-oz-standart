@@ -136,6 +136,7 @@ async findallstatisticsfilter(
     income_number :string,
     operator :string ,
     response : string,
+    application_type :string,
     applicant :string,
     fromDate: string,
     untilDate: string,
@@ -150,6 +151,7 @@ async findallstatisticsfilter(
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
+          application_type: application_type =='null'? null : application_type,
           IsDraf: 'false',
           sub_category_call_center: {
             id: subCategoryId == 'null' ? null : subCategoryId,
@@ -215,6 +217,7 @@ async findallstatisticsfilter(
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
+          application_type: application_type =='null'? null : application_type,
           IsDraf: 'false',
           sub_category_call_center: {
             id: subCategoryId == 'null' ? null : subCategoryId,
@@ -271,6 +274,7 @@ async findallstatisticsfilter(
     income_number :string,
     operator :string ,
     response : string,
+    application_type: string,
     applicant :string,
     fromDate: string,
     untilDate: string,
@@ -285,6 +289,7 @@ async findallstatisticsfilter(
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
+          application_type  : application_type =='null'? null : application_type,
           IsDraf: 'true',
           sub_category_call_center: {
             id: subCategoryId == 'null' ? null : subCategoryId,
@@ -349,6 +354,7 @@ async findallstatisticsfilter(
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
+          application_type: application_type =='null'? null : application_type,
           IsDraf: 'true',
           sub_category_call_center: {
             id: subCategoryId == 'null' ? null : subCategoryId,
