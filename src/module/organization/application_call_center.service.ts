@@ -150,11 +150,11 @@ async findallstatisticsfilter(
 
     if (fromDate == 'null' || untilDate == 'null') {
       const [results, total] = await ApplicationCallCenterEntity.findAndCount({
-        where: {
+        where: [{
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
-          additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          // additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           response: response =='null'? null : response,
           application_type: application_type =='null'? null : application_type,
@@ -174,7 +174,31 @@ async findallstatisticsfilter(
           user: {
             id: operator == 'null' ? null : operator
           }
+        },{
+        incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
+        applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
+        additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+        applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
+        response: response =='null'? null : response,
+        application_type: application_type =='null'? null : application_type,
+        IsDraf: 'false',
+        sub_category_call_center: {
+          id: subCategoryId == 'null' ? null : subCategoryId,
+          category_org: {
+            id: categoryId == 'null' ? null : categoryId,
+          },
         },
+        districts : {
+          id: district =='null' ? null : district,
+          region : {
+            id: region == 'null' ? null : region,
+           }
+        },
+        user: {
+          id: operator == 'null' ? null : operator
+        }
+      },
+      ],
         relations: {
           seded_to_Organization:true,
           sub_category_call_center: {
@@ -220,13 +244,13 @@ async findallstatisticsfilter(
       );
 
       const [results, total] = await ApplicationCallCenterEntity.findAndCount({
-        where: {
+        where: [{
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
           application_type: application_type =='null'? null : application_type,
           phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
-          additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          // additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           IsDraf: 'false',
           sub_category_call_center: {
@@ -243,6 +267,30 @@ async findallstatisticsfilter(
           },
           create_data: Between(fromDateFormatted, untilDateFormatted),
         },
+        {
+          incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
+          applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
+          response: response =='null'? null : response,
+          application_type: application_type =='null'? null : application_type,
+          // phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
+          IsDraf: 'false',
+          sub_category_call_center: {
+            id: subCategoryId == 'null' ? null : subCategoryId,
+            category_org: {
+              id: categoryId == 'null' ? null : categoryId,
+            },
+          },
+          districts : {
+            id: district =='null' ? null : district,
+            region : {
+              id: region == 'null' ? null : region,
+             }
+          },
+          create_data: Between(fromDateFormatted, untilDateFormatted),
+        }
+      ],
         relations: {
           sub_category_call_center: {
             category_org: true,
@@ -299,12 +347,12 @@ async findallstatisticsfilter(
 
     if (fromDate == 'null' || untilDate == 'null') {
       const [results, total] = await ApplicationCallCenterEntity.findAndCount({
-        where: {
+        where:[ {
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
           phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
-          additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          // additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           application_type  : application_type =='null'? null : application_type,
           IsDraf: 'true',
@@ -324,6 +372,32 @@ async findallstatisticsfilter(
             id: operator == 'null' ? null : operator
           }
         },
+        {
+          incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
+          applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
+          response: response =='null'? null : response,
+          // phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
+          application_type  : application_type =='null'? null : application_type,
+          IsDraf: 'true',
+          sub_category_call_center: {
+            id: subCategoryId == 'null' ? null : subCategoryId,
+            category_org: {
+              id: categoryId == 'null' ? null : categoryId,
+            },
+          },
+          districts : {
+            id: district =='null' ? null : district,
+            region : {
+              id: region == 'null' ? null : region,
+             }
+          },
+          user: {
+            id: operator == 'null' ? null : operator
+          }
+        }
+      ],
         relations: {
           sub_category_call_center: {
             category_org: true,
@@ -369,11 +443,34 @@ async findallstatisticsfilter(
       );
 
       const [results, total] = await ApplicationCallCenterEntity.findAndCount({
-        where: {
+        where: [{
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
           phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          // additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
+          application_type: application_type =='null'? null : application_type,
+          IsDraf: 'true',
+          sub_category_call_center: {
+            id: subCategoryId == 'null' ? null : subCategoryId,
+            category_org: {
+              id: categoryId == 'null' ? null : categoryId,
+            },
+          },
+          districts : {
+            id: district =='null' ? null : district,
+            region : {
+              id: region == 'null' ? null : region,
+             }
+          },
+          create_data: Between(fromDateFormatted, untilDateFormatted),
+        },
+        {
+          incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
+          applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
+          response: response =='null'? null : response,
+          // phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           application_type: application_type =='null'? null : application_type,
@@ -392,6 +489,7 @@ async findallstatisticsfilter(
           },
           create_data: Between(fromDateFormatted, untilDateFormatted),
         },
+      ],
         relations: {
           sub_category_call_center: {
             category_org: true,
