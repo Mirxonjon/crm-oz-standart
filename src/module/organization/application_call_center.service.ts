@@ -529,10 +529,10 @@ async findallstatisticsfilter(
         // crossfields: body.crossfields,
         income_date: body.income_date,
         incoming_number: `UZST/${ApplicationCount+1}`,
-        organization_name: body.organization_name,
+        status: body.status,
         organization_type: body.organization_type,
         perform_date: body.perform_date,
-        performer: body.performer,
+        email: body.email,
         resend_application: body.resend_application,
         response: body.response,
         IsDraf: body.IsDraf,
@@ -629,12 +629,12 @@ async findallstatisticsfilter(
       // crossfields: body.crossfields || findaplicationCallCenter.crossfields,
       income_date: body.income_date || findaplicationCallCenter.income_date,
       phone: body.phone || findaplicationCallCenter.phone, 
-      organization_name:
-        body.organization_name || findaplicationCallCenter.organization_name,
+      status:
+        body.status || findaplicationCallCenter.status,
       organization_type:
         body.organization_type || findaplicationCallCenter.organization_type,
       perform_date: body.perform_date || findaplicationCallCenter.perform_date,
-      performer: body.performer|| findaplicationCallCenter.performer,
+      email: body.email|| findaplicationCallCenter.email,
       resend_application:
         body.resend_application || findaplicationCallCenter.resend_application,
       response: body.response || findaplicationCallCenter.response,

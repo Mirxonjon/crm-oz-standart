@@ -72,7 +72,7 @@ export class ApplicationCallCenterEntity extends BaseEntity {
     type: 'character varying',
     nullable: true,
   })
-  organization_name: string;
+  status: string;
 
   @Column({
     type: 'character varying',
@@ -90,7 +90,7 @@ export class ApplicationCallCenterEntity extends BaseEntity {
     type: 'character varying',
     nullable: true,
   })
-  performer: string;
+  email: string;
 
   @Column({
     type: 'character varying',

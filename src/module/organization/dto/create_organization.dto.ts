@@ -41,8 +41,8 @@ export class CreateApplicationCallCenterDto {
   // @IsNotEmpty()
   // incoming_number: string;
 
-  @IsString()
-  organization_name: string;
+  // @IsString()
+  status: string;
 
   @IsString()
   organization_type: string;
@@ -51,7 +51,7 @@ export class CreateApplicationCallCenterDto {
   perform_date: string;
 
   // @IsString()
-  performer: string;
+  email: string;
 
   @IsString()
   resend_application: string;
@@ -82,6 +82,7 @@ export class CreateApplicationCallCenterDto {
   operator_number  :string
 
   street_and_apartment  :string
+
 
 
 

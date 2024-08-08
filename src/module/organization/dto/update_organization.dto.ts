@@ -34,7 +34,7 @@ export class UpdateApplicationCallCenterDto {
   // incoming_number: string;
 
   @IsString()
-  organization_name: string;
+  status: string;
 
   @IsString()
   organization_type: string;
@@ -42,8 +42,8 @@ export class UpdateApplicationCallCenterDto {
   @IsString()
   perform_date: string;
 
-  @IsString()
-  performer: string;
+  // @IsString()
+  email: string;
 
 
   @IsString()
