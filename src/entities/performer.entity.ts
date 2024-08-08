@@ -24,7 +24,7 @@ import { ApplicationCallCenterEntity } from './applicationCallCenter.entity';
 
     @OneToMany(
       () => ApplicationCallCenterEntity,
-      (application) => application.performer,
+      (application) => application.performers,
     )
     applicationCallcenterPerformer: ApplicationCallCenterEntity[];
   
