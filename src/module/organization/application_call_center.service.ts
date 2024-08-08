@@ -532,7 +532,7 @@ async findallstatisticsfilter(
         status: body.status,
         organization_type: body.organization_type,
         perform_date: body.perform_date,
-        email: body.email,
+        email: body.email ,
         resend_application: body.resend_application,
         response: body.response,
         IsDraf: body.IsDraf,

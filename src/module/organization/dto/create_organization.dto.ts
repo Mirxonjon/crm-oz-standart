@@ -41,7 +41,7 @@ export class CreateApplicationCallCenterDto {
   // @IsNotEmpty()
   // incoming_number: string;
 
-  // @IsString()
+  @IsString()
   status: string;
 
   @IsString()
@@ -50,7 +50,7 @@ export class CreateApplicationCallCenterDto {
   @IsString()
   perform_date: string;
 
-  // @IsString()
+  @IsString()
   email: string;
 
   @IsString()

@@ -275,6 +275,14 @@ export class ApplicationCallCenterController {
           type: 'string',
           default: '2024-07-02',
         },
+        status: {
+          type: 'string',
+          default: 'True',
+        },
+        email: {
+          type: 'string',
+          default: '2024-07-02',
+        },
       },
     },
   })
@@ -290,7 +298,7 @@ export class ApplicationCallCenterController {
     // console.log(request.userId ,'iiiiii');
     
     return await this.#_service.create(request ,createOrganizationDto);
-  }
+  } 
 
   // @UseGuards(jwtGuard)
   @RequiredRoles(RolesEnum.OPERATOR,RolesEnum.ADMIN)
