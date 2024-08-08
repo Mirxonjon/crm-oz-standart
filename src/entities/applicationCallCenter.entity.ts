@@ -13,6 +13,7 @@ import { Sub_Category_Section_Entity } from './sub_category_org.entity';
 import { District_Entity } from './district.entity';
 import { UsersEntity } from './users.entity';
 import { HistoryAplicationEntity } from './history.entity';
+import { PerformerEntity } from './performer.entity';
 
 @Entity()
 export class ApplicationCallCenterEntity extends BaseEntity {
@@ -89,8 +90,6 @@ export class ApplicationCallCenterEntity extends BaseEntity {
     type: 'character varying',
     nullable: true,
   })
-
-
   performer: string;
 
   @Column({
@@ -104,6 +103,58 @@ export class ApplicationCallCenterEntity extends BaseEntity {
     nullable: true,
   })
   response: string;
+
+  @Column({
+    type: 'character varying',
+    nullable: true,
+  })
+  additional_phone: string;
+
+
+  @Column({
+    type: 'character varying',
+    nullable: true,
+  })
+  applicant_birthday: string;
+
+  @Column({
+    type: 'character varying',
+    nullable: true,
+  })
+  executer: string;
+
+  @Column({
+    type: 'character varying',
+    nullable: true,
+  })
+  gender: string;
+
+  @Column({
+    type: 'character varying',
+    nullable: true,
+  })
+  mfy: string;
+
+  @Column({
+    
+    type: 'character varying',
+    nullable: true,
+  })
+  operator_number: string;
+
+  // @Column({
+  //   type: 'character varying',
+  //   nullable: true,
+  // })
+  // phone: string;
+
+  @Column({
+    type: 'character varying',
+    nullable: true,
+  })
+  street_and_apartment: string;
+
+
 
   @Column({
     type: 'character varying',
@@ -139,6 +190,15 @@ export class ApplicationCallCenterEntity extends BaseEntity {
     { nullable: true },
   )
   seded_to_Organization: SendedOrganizationEntity;
+
+  
+  @ManyToOne(
+    () => PerformerEntity,
+    (user) => user.applicationCallcenterPerformer,
+    { nullable: true },
+  )
+  performers: PerformerEntity;
+
 
 
   

@@ -94,6 +94,8 @@ export class ApplicationCallCenterController {
     @Query('response') response: string,
     @Query('application_type') application_type: string,
     @Query('applicant') applicant: string,
+    @Query('phone') phone: string,
+    @Query('applicant_birthday') applicant_birthday: string,
     @Query('date_from') fromDate: string,
     @Query('date_to') untilDate: string,
     @Query('page') page: string,
@@ -109,6 +111,8 @@ export class ApplicationCallCenterController {
       response,
       application_type,
       applicant,
+      phone,
+      applicant_birthday,
       fromDate,
       untilDate,
       +page,
@@ -135,6 +139,8 @@ export class ApplicationCallCenterController {
     @Query('response') response: string,
     @Query('application_type') application_type: string,
     @Query('applicant') applicant: string,
+    @Query('phone') phone: string,
+    @Query('applicant_birthday') applicant_birthday: string,
     @Query('date_from') fromDate: string,
     @Query('date_to') untilDate: string,
     @Query('page') page: string,
@@ -150,6 +156,8 @@ export class ApplicationCallCenterController {
       response,
       application_type,
       applicant,
+      phone,
+      applicant_birthday,
       fromDate,
       untilDate,
       +page,
@@ -238,6 +246,34 @@ export class ApplicationCallCenterController {
         IsDraf: {
           type: 'string',
           default: 'false',
+        },
+        performer_id: {
+          type: 'string',
+          default: '2024-07-02',
+        },
+        additional_phone: {
+          type: 'string',
+          default: '9989999999',
+        },
+        application_birthday: {
+          type: 'string',
+          default: '2024-07-02',
+        },
+        executer: {
+          type: 'string',
+          default: '2024-07-02',
+        },
+        mfy: {
+          type: 'string',
+          default: 'qatdir',
+        },
+        operator_number: {
+          type: 'string',
+          default: '2024-07-02',
+        },
+        street_and_apartment: {
+          type: 'string',
+          default: '2024-07-02',
         },
       },
     },
@@ -329,6 +365,35 @@ export class ApplicationCallCenterController {
         IsDraf: {
           type: 'string',
           default: 'false',
+        },
+
+        performer_id: {
+          type: 'string',
+          default: '2024-07-02',
+        },
+        additional_phone: {
+          type: 'string',
+          default: '9989999999',
+        },
+        application_birthday: {
+          type: 'string',
+          default: '2024-07-02',
+        },
+        executer: {
+          type: 'string',
+          default: '2024-07-02',
+        },
+        mfy: {
+          type: 'string',
+          default: 'qatdir',
+        },
+        operator_number: {
+          type: 'string',
+          default: '2024-07-02',
+        },
+        street_and_apartment: {
+          type: 'string',
+          default: '2024-07-02',
         },
       },
     },

@@ -50,7 +50,7 @@ export class CreateApplicationCallCenterDto {
   @IsString()
   perform_date: string;
 
-  @IsString()
+  // @IsString()
   performer: string;
 
   @IsString()
@@ -62,7 +62,28 @@ export class CreateApplicationCallCenterDto {
   @IsString()
   sended_to_organizations: string;
 
-
+  
+  
   @IsString()
   IsDraf: string;
+  
+  performer_id :string
+
+  additional_phone:string
+
+  applicant_birthday  :string
+
+  executer  :string
+
+  gender  :string
+
+  mfy  :string
+
+  operator_number  :string
+
+  street_and_apartment  :string
+
+
+
+
 }

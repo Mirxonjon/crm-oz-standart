@@ -10,6 +10,7 @@ import { District_Entity } from 'src/entities/district.entity';
 import { CustomRequest } from 'src/types';
 import { HistoryAplicationEntity } from 'src/entities/history.entity';
 import { SendedOrganizationEntity } from 'src/entities/sende_organization.entity';
+import { PerformerEntity } from 'src/entities/performer.entity';
 
 @Injectable()
 export class ApplicationCallCenterServise {
@@ -138,6 +139,8 @@ async findallstatisticsfilter(
     response : string,
     application_type :string,
     applicant :string,
+    phone:string,
+    applicant_birthday: string,
     fromDate: string,
     untilDate: string,
     pageNumber = 1,
@@ -150,6 +153,9 @@ async findallstatisticsfilter(
         where: {
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
+          phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           response: response =='null'? null : response,
           application_type: application_type =='null'? null : application_type,
           IsDraf: 'false',
@@ -177,7 +183,8 @@ async findallstatisticsfilter(
           districts: {
             region: true
           },
-          user : true
+          user : true,
+          performers: true,
     
         },
         skip: offset,
@@ -218,6 +225,9 @@ async findallstatisticsfilter(
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
           application_type: application_type =='null'? null : application_type,
+          phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           IsDraf: 'false',
           sub_category_call_center: {
             id: subCategoryId == 'null' ? null : subCategoryId,
@@ -241,6 +251,8 @@ async findallstatisticsfilter(
             region: true
           },
           seded_to_Organization:true,
+          performers: true,
+
         },
         skip: offset,
         take: pageSize,
@@ -276,6 +288,8 @@ async findallstatisticsfilter(
     response : string,
     application_type: string,
     applicant :string,
+    phone :string,
+    applicant_birthday :string,
     fromDate: string,
     untilDate: string,
     pageNumber = 1,
@@ -289,6 +303,9 @@ async findallstatisticsfilter(
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
+          phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           application_type  : application_type =='null'? null : application_type,
           IsDraf: 'true',
           sub_category_call_center: {
@@ -315,7 +332,9 @@ async findallstatisticsfilter(
             region: true
           },
           seded_to_Organization:true,
-          user : true
+          user : true,
+          performers: true,
+
         },
         skip: offset,
         take: pageSize,
@@ -354,6 +373,9 @@ async findallstatisticsfilter(
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
+          phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           application_type: application_type =='null'? null : application_type,
           IsDraf: 'true',
           sub_category_call_center: {
@@ -378,6 +400,8 @@ async findallstatisticsfilter(
             region: true
           },
           seded_to_Organization:true,
+          performers: true,
+
         },
         skip: offset,
         take: pageSize,
@@ -417,6 +441,8 @@ async findallstatisticsfilter(
           region : true
         },
         seded_to_Organization: true,
+        performers: true,
+
         history: {
           user_history:true
         },
@@ -477,6 +503,18 @@ async findallstatisticsfilter(
       });
     }
 
+    let performer_id = null 
+    if (body.performer_id != 'null') {
+      performer_id = await PerformerEntity.findOne({
+        where: {
+          id: body.performer_id,
+        },
+      }).catch((e) => {
+        console.log(e);
+        throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+      });
+    }
+
     const ApplicationCount =  await ApplicationCallCenterEntity.count() 
 
     const createdOrg = await ApplicationCallCenterEntity.createQueryBuilder()
@@ -501,6 +539,14 @@ async findallstatisticsfilter(
         sub_category_call_center: findSubCategory,
         districts : findDistrict,
         seded_to_Organization: seded_to_Organization,
+        performers: performer_id,
+        additional_phone : body.additional_phone,
+        applicant_birthday :body.applicant_birthday,
+        executer : body.executer,
+        gender :body.gender,
+        mfy: body.mfy,
+        operator_number :body.operator_number,
+        street_and_apartment: body.street_and_apartment,
         user: {
           id :request.userId
         }
@@ -560,6 +606,18 @@ async findallstatisticsfilter(
         throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
       });
     }
+
+    let performer_id = findaplicationCallCenter.performers
+    if (body.performer_id != 'null') {
+      performer_id = await PerformerEntity.findOne({
+        where: {
+          id: body.performer_id,
+        },
+      }).catch((e) => {
+        console.log(e);
+        throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+      });
+    }
     // console.log(findSubCategory, findDistrict, 'okk');
     
     const updatedOrganization = await ApplicationCallCenterEntity.update(id, {
@@ -584,6 +642,14 @@ async findallstatisticsfilter(
         IsDraf: body.IsDraf || findaplicationCallCenter.IsDraf ,
       sub_category_call_center: findSubCategory,
       districts :findDistrict ,       
+      performers: performer_id ,
+      additional_phone : body.additional_phone || findaplicationCallCenter.additional_phone,
+      applicant_birthday :body.applicant_birthday || findaplicationCallCenter.applicant_birthday,
+      executer : body.executer || findaplicationCallCenter.executer,
+      gender :body.gender || findaplicationCallCenter.gender,
+      mfy: body.mfy || findaplicationCallCenter.mfy,
+      operator_number :body.operator_number || findaplicationCallCenter.operator_number,
+      street_and_apartment: body.street_and_apartment || findaplicationCallCenter.street_and_apartment ,
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });

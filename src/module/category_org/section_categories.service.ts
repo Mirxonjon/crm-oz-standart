@@ -255,7 +255,9 @@ export class SectionCategoriesService {
       
       const Applicationcount = await ApplicationCallCenterEntity.count({
         where : {
+          IsDraf : 'false',
           districts : {
+            
             region :{
               id: regionId == 'null' ? null : regionId
             }
@@ -264,6 +266,8 @@ export class SectionCategoriesService {
       })
       const ApplicationTypecount = await ApplicationCallCenterEntity.count({
         where : {
+          IsDraf : 'false',
+
          application_type : 'Ariza', 
           districts : {
             region :{
@@ -276,6 +280,7 @@ export class SectionCategoriesService {
 
       const ApplicationTypeOffercount = await ApplicationCallCenterEntity.count({
         where : {
+          IsDraf : 'false',
           application_type : 'Taklif', 
           districts : {
             region :{
@@ -288,6 +293,7 @@ export class SectionCategoriesService {
 
       const ApplicationComplaintcount = await ApplicationCallCenterEntity.count({
         where : {
+          IsDraf : 'false',
           application_type : 'Shikoyat', 
           districts : {
             region :{
@@ -299,6 +305,7 @@ export class SectionCategoriesService {
 
       const ApplicationProvideInformation = await ApplicationCallCenterEntity.count({
         where : {
+          IsDraf : 'false',
           application_type : `Ma'lumot berish`, 
           districts : {
             region :{
@@ -311,6 +318,7 @@ export class SectionCategoriesService {
 
       const ApplicationOther = await ApplicationCallCenterEntity.count({
         where : {
+          IsDraf : 'false',
           application_type : `Бошқа масалалар`, 
           districts : {
             region :{

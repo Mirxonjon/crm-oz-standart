@@ -12,6 +12,7 @@ import { DistrictModule } from './module/dictrict/district.module';
 import { AuthModule } from './module/auth/auth.module';
 import { SendedOrganizationModule } from './module/sende_organization/sended_organization.module';
 import { RolesGuard } from './module/auth/guards/roles.guard';
+import { PerformerModule } from './module/performer/Performer.module';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { RolesGuard } from './module/auth/guards/roles.guard';
     RegionCategoriesModule,
     DistrictModule,
     SendedOrganizationModule,
-
+    PerformerModule
   ],
   controllers: [],
   providers: [
