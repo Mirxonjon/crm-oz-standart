@@ -11,6 +11,8 @@ import { CustomRequest } from 'src/types';
 import { HistoryAplicationEntity } from 'src/entities/history.entity';
 import { SendedOrganizationEntity } from 'src/entities/sende_organization.entity';
 import { PerformerEntity } from 'src/entities/performer.entity';
+import { toUnixTimestamp } from 'src/utils/time';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class ApplicationCallCenterServise {
@@ -141,6 +143,7 @@ async findallstatisticsfilter(
     applicant :string,
     phone:string,
     applicant_birthday: string,
+    status :string,
     fromDate: string,
     untilDate: string,
     pageNumber = 1,
@@ -155,6 +158,7 @@ async findallstatisticsfilter(
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           // additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          status :status == 'null'? null : status,
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           response: response =='null'? null : response,
           application_type: application_type =='null'? null : application_type,
@@ -178,6 +182,7 @@ async findallstatisticsfilter(
         incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
         applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
         additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+        status :status == 'null'? null : status,
         applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
         response: response =='null'? null : response,
         application_type: application_type =='null'? null : application_type,
@@ -250,6 +255,7 @@ async findallstatisticsfilter(
           response: response =='null'? null : response,
           application_type: application_type =='null'? null : application_type,
           phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          status :status == 'null'? null : status,
           // additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           IsDraf: 'false',
@@ -272,6 +278,7 @@ async findallstatisticsfilter(
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
           application_type: application_type =='null'? null : application_type,
+          status :status == 'null'? null : status,
           // phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
@@ -338,6 +345,7 @@ async findallstatisticsfilter(
     applicant :string,
     phone :string,
     applicant_birthday :string,
+    status :string,
     fromDate: string,
     untilDate: string,
     pageNumber = 1,
@@ -352,6 +360,7 @@ async findallstatisticsfilter(
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
           phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          status :status == 'null'? null : status,
           // additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           application_type  : application_type =='null'? null : application_type,
@@ -377,6 +386,8 @@ async findallstatisticsfilter(
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
           // phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          status :status == 'null'? null : status,
+
           additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           application_type  : application_type =='null'? null : application_type,
@@ -448,6 +459,7 @@ async findallstatisticsfilter(
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
           phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
+          status :status == 'null'? null : status,
           // additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
           application_type: application_type =='null'? null : application_type,
@@ -470,6 +482,7 @@ async findallstatisticsfilter(
           incoming_number : income_number == 'null' ? null :  ILike(`%${income_number}%`),
           applicant : applicant == 'null' ? null :  ILike(`%${applicant}%`),
           response: response =='null'? null : response,
+          status :status == 'null'? null : status,
           // phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           additional_phone :  phone == 'null' ? null :  ILike(`%${phone}%`),
           applicant_birthday: applicant_birthday =='null'? null : applicant_birthday,
@@ -644,6 +657,7 @@ async findallstatisticsfilter(
         gender :body.gender,
         mfy: body.mfy,
         operator_number :body.operator_number,
+        status_unixTimestamp: `${toUnixTimestamp(new Date())}`,
         street_and_apartment: body.street_and_apartment,
         user: {
           id :request.userId
@@ -788,4 +802,48 @@ async findallstatisticsfilter(
 
     await ApplicationCallCenterEntity.delete({ id });
   }
+
+  @Cron('59 23 * * *')
+ async updateAplecation() {
+
+    const findApplications = await ApplicationCallCenterEntity.find({
+      where : {
+        IsDraf : 'false',
+        status: 'Кўриб чиқиш жараёнида'
+      }
+    })
+    let atTheTime =await toUnixTimestamp(new Date())
+
+    for(let i of findApplications){
+      let minesCreteDateAtTheTime =  atTheTime - +i.status_unixTimestamp
+      let fifteenDays = 15 * 24 * 60 * 60
+      if(fifteenDays < minesCreteDateAtTheTime){ {
+        ApplicationCallCenterEntity.update(i.id, {
+          status: `Кўриб чиқиш жараёни чўздирилган` ,
+        })
+      }
+    }
+    // Bu yerda kerakli vazifani bajaring
+  }
+
+  const findApplicationsAfterFifteenDays = await ApplicationCallCenterEntity.find({
+    where : {
+      IsDraf : 'false',
+      status: 'Кўриб чиқиш жараёни чўздирилган'
+    }
+  })
+  // let atTheTime =await toUnixTimestamp(new Date())
+
+  for(let i of findApplicationsAfterFifteenDays){
+    let minesCreteDateAtTheTime =  atTheTime - +i.status_unixTimestamp
+    let thirtyDays = 30 * 24 * 60 * 60
+    if(thirtyDays < minesCreteDateAtTheTime){ {
+      ApplicationCallCenterEntity.update(i.id, {
+        status: `Мурожаат муддати ўтган` ,
+      })
+    }
+  }
+
+}
+}
 }

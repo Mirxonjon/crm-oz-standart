@@ -78,6 +78,12 @@ export class ApplicationCallCenterEntity extends BaseEntity {
     type: 'character varying',
     nullable: true,
   })
+  status_unixTimestamp: string;
+
+  @Column({
+    type: 'character varying',
+    nullable: true,
+  })
   organization_type: string;
 
   @Column({
