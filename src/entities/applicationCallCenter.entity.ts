@@ -142,7 +142,7 @@ export class ApplicationCallCenterEntity extends BaseEntity {
   mfy: string;
 
   @Column({
-    
+
     type: 'character varying',
     nullable: true,
   })
@@ -165,14 +165,14 @@ export class ApplicationCallCenterEntity extends BaseEntity {
   @Column({
     type: 'character varying',
     default: 'false',
-    nullable :true
+    nullable: true
   })
   IsDraf: string;
 
   @ManyToOne(
     () => Sub_Category_Section_Entity,
     (sub_category_org) => sub_category_org.applicationCallcenter,
-    {nullable :true , onDelete: 'CASCADE'}
+    { nullable: true, onDelete: 'CASCADE' }
   )
   sub_category_call_center: Sub_Category_Section_Entity;
 
@@ -197,7 +197,7 @@ export class ApplicationCallCenterEntity extends BaseEntity {
   )
   seded_to_Organization: SendedOrganizationEntity;
 
-  
+
   @ManyToOne(
     () => PerformerEntity,
     (user) => user.applicationCallcenterPerformer,
@@ -205,9 +205,12 @@ export class ApplicationCallCenterEntity extends BaseEntity {
   )
   performers: PerformerEntity;
 
+  @Column({
+    type: 'character varying',
+    nullable: true,
+  })
+  response_file: string;
 
-
-  
   @OneToMany(
     () => HistoryAplicationEntity,
     (history) => history.applicationCallCenter,

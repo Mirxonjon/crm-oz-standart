@@ -57,13 +57,13 @@ export class ApplicationCallCenterController {
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'pageSize', required: false })
   async findallstatisticsfilter(
-    @Query('categoryId') categoryId: string = 'null',
-    @Query('subCategoryId') subCategoryId: string = 'null',
-    @Query('region') region: string = 'null',
-    @Query('date_from') fromDate: string = 'null',
-    @Query('date_to') untilDate: string = 'null',
-    @Query('page') page: string = '1',
-    @Query('pageSize') pageSize: string = '10',
+    @Query('categoryId') categoryId = 'null',
+    @Query('subCategoryId') subCategoryId = 'null',
+    @Query('region') region = 'null',
+    @Query('date_from') fromDate = 'null',
+    @Query('date_to') untilDate = 'null',
+    @Query('page') page = '1',
+    @Query('pageSize') pageSize = '10',
   ) {
     return await this.#_service.findallstatisticsfilter(
       categoryId,
@@ -122,7 +122,6 @@ export class ApplicationCallCenterController {
     );
   }
 
-  
   @Get('/allDrafts')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -178,7 +177,7 @@ export class ApplicationCallCenterController {
   }
 
   // @UseGuards(jwtGuard)
-  @RequiredRoles(RolesEnum.OPERATOR,RolesEnum.ADMIN)
+  @RequiredRoles(RolesEnum.OPERATOR, RolesEnum.ADMIN)
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
   @ApiBody({
@@ -206,7 +205,7 @@ export class ApplicationCallCenterController {
           type: 'string',
           default: 'Мурожаатнинг қисқача мазмуни',
         },
-        phone :{
+        phone: {
           type: 'string',
           default: '998933843484',
         },
@@ -300,12 +299,40 @@ export class ApplicationCallCenterController {
     @Body() createOrganizationDto: CreateApplicationCallCenterDto,
   ): Promise<void> {
     // console.log(request.userId ,'iiiiii');
-    
-    return await this.#_service.create(request ,createOrganizationDto);
-  } 
+
+    return await this.#_service.create(request, createOrganizationDto);
+  }
+
+  @RequiredRoles(RolesEnum.ADMIN)
+  @Post('/response/:id')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  @UseInterceptors(AnyFilesInterceptor())
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async response(
+    @Request() request: CustomRequest,
+    @Param('id') applicationId: string,
+    @UploadedFiles() file: Express.Multer.File,
+  ): Promise<void> {
+    // console.log(request.userId ,'iiiiii');
+
+    return await this.#_service.response(request, applicationId, file);
+  }
 
   // @UseGuards(jwtGuard)
-  @RequiredRoles(RolesEnum.OPERATOR,RolesEnum.ADMIN)
+  @RequiredRoles(RolesEnum.OPERATOR, RolesEnum.ADMIN)
   @Patch('/update/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBody({
@@ -333,7 +360,7 @@ export class ApplicationCallCenterController {
           default: 'Мурожаатнинг қисқача мазмуни',
         },
 
-        phone :{
+        phone: {
           type: 'string',
           default: '998933843484',
         },
@@ -410,7 +437,6 @@ export class ApplicationCallCenterController {
       },
     },
   })
-
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   async update(
@@ -418,7 +444,7 @@ export class ApplicationCallCenterController {
     @Request() request: CustomRequest,
     @Body() updateOrganizationDto: UpdateApplicationCallCenterDto,
   ): Promise<void> {
-    await this.#_service.update(request , id , updateOrganizationDto);
+    await this.#_service.update(request, id, updateOrganizationDto);
   }
 
   // @UseGuards(jwtGuard)
