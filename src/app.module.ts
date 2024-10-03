@@ -13,6 +13,7 @@ import { AuthModule } from './module/auth/auth.module';
 import { SendedOrganizationModule } from './module/sende_organization/sended_organization.module';
 import { RolesGuard } from './module/auth/guards/roles.guard';
 import { PerformerModule } from './module/performer/Performer.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PerformerModule } from './module/performer/Performer.module';
         ttl: 3600000,
       }),
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     SectionCategoriesModule,
     SubCategorySectionModule,
@@ -41,4 +43,4 @@ import { PerformerModule } from './module/performer/Performer.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

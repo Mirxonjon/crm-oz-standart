@@ -7,12 +7,12 @@ import { Sub_Category_Section_Entity } from 'src/entities/sub_category_org.entit
 import { ApplicationCallCenterEntity } from 'src/entities/applicationCallCenter.entity';
 import { Between, ILike } from 'typeorm';
 import { District_Entity } from 'src/entities/district.entity';
-import { CustomRequest } from 'src/types';
+import { ApplicationStatuses, CustomRequest } from 'src/types';
 import { HistoryAplicationEntity } from 'src/entities/history.entity';
 import { SendedOrganizationEntity } from 'src/entities/sende_organization.entity';
 import { PerformerEntity } from 'src/entities/performer.entity';
 import { toUnixTimestamp } from 'src/utils/time';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { googleCloudAsync } from 'src/utils/google_cloud';
 
 @Injectable()
@@ -661,7 +661,7 @@ export class ApplicationCallCenterServise {
         // crossfields: body.crossfields,
         income_date: body.income_date,
         incoming_number: `UZST/${ApplicationCount + 1}`,
-        status: body.status,
+        status: ApplicationStatuses.New,
         organization_type: body.organization_type,
         perform_date: body.perform_date,
         email: body.email,
@@ -851,47 +851,66 @@ export class ApplicationCallCenterServise {
     await ApplicationCallCenterEntity.delete({ id });
   }
 
-  @Cron('59 23 * * *')
-  async updateAplecation() {
-    const findApplications = await ApplicationCallCenterEntity.find({
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  async updateApplication() {
+    console.log('CRON LOG');
+    const currentUnixTime = Math.floor(Date.now() / 1000);
+    const unixTimeIn24Hours = 1 * 86400;
+    const unixTimeIn15Days = 15 * 86400;
+    const unixTimeIn30Days = 30 * 86400;
+    // const unixTimeIn60Seconds = 60;
+
+    const applicationsInNewStatus = await ApplicationCallCenterEntity.find({
       where: {
         IsDraf: 'false',
-        status: 'Кўриб чиқиш жараёнида',
+        status: ApplicationStatuses.New,
       },
     });
-    const atTheTime = await toUnixTimestamp(new Date());
 
-    for (const i of findApplications) {
-      const minesCreteDateAtTheTime = atTheTime - +i.status_unixTimestamp;
-      const fifteenDays = 15 * 24 * 60 * 60;
-      if (fifteenDays < minesCreteDateAtTheTime) {
-        {
-          ApplicationCallCenterEntity.update(i.id, {
-            status: `Кўриб чиқиш жараёни чўздирилган`,
-          });
-        }
+    for (let i = 0; i < applicationsInNewStatus.length; i++) {
+      console.log(applicationsInNewStatus[i])
+      const applicationTime = applicationsInNewStatus[i].status_unixTimestamp
+
+      if (currentUnixTime - +applicationTime > unixTimeIn24Hours) {
+        ApplicationCallCenterEntity.update(applicationsInNewStatus[i].id, {
+          status: ApplicationStatuses.Process,
+        });
       }
-      // Bu yerda kerakli vazifani bajaring
     }
 
-    const findApplicationsAfterFifteenDays =
-      await ApplicationCallCenterEntity.find({
-        where: {
-          IsDraf: 'false',
-          status: 'Кўриб чиқиш жараёни чўздирилган',
-        },
-      });
-    // let atTheTime =await toUnixTimestamp(new Date())
+    const applicationsInProcessStatus = await ApplicationCallCenterEntity.find({
+      where: {
+        IsDraf: 'false',
+        status: ApplicationStatuses.Process,
+      },
+    });
 
-    for (const i of findApplicationsAfterFifteenDays) {
-      const minesCreteDateAtTheTime = atTheTime - +i.status_unixTimestamp;
-      const thirtyDays = 30 * 24 * 60 * 60;
-      if (thirtyDays < minesCreteDateAtTheTime) {
-        {
-          ApplicationCallCenterEntity.update(i.id, {
-            status: `Мурожаат муддати ўтган`,
-          });
-        }
+    for (let i = 0; i < applicationsInProcessStatus.length; i++) {
+      console.log(applicationsInProcessStatus[i])
+      const applicationTime = applicationsInProcessStatus[i].status_unixTimestamp
+
+      if (currentUnixTime - +applicationTime > unixTimeIn15Days) {
+        ApplicationCallCenterEntity.update(applicationsInProcessStatus[i].id, {
+          status: ApplicationStatuses.Extended,
+        });
+      }
+    }
+
+    const applicationsInExtendedStatus = await ApplicationCallCenterEntity.find({
+      where: {
+        IsDraf: 'false',
+        status: ApplicationStatuses.Extended,
+      },
+    });
+
+    for (let i = 0; i < applicationsInExtendedStatus.length; i++) {
+      console.log(applicationsInExtendedStatus[i])
+      const applicationTime = applicationsInExtendedStatus[i].status_unixTimestamp
+
+      if (currentUnixTime - +applicationTime > unixTimeIn30Days) {
+        ApplicationCallCenterEntity.update(applicationsInExtendedStatus[i].id, {
+          status: ApplicationStatuses.Extended,
+        });
       }
     }
   }

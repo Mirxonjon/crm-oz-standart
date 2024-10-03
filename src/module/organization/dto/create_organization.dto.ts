@@ -62,26 +62,26 @@ export class CreateApplicationCallCenterDto {
   @IsString()
   sended_to_organizations: string;
 
-  
-  
+
+
   @IsString()
   IsDraf: string;
-  
-  performer_id :string
 
-  additional_phone:string
+  performer_id: string
 
-  applicant_birthday  :string
+  additional_phone: string
 
-  executer  :string
+  applicant_birthday: string
 
-  gender  :string
+  executer: string
 
-  mfy  :string
+  gender: string
 
-  operator_number  :string
+  mfy: string
 
-  street_and_apartment  :string
+  operator_number: string
+
+  street_and_apartment: string
 
 
 
