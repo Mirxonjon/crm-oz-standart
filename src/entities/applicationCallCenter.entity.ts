@@ -148,11 +148,12 @@ export class ApplicationCallCenterEntity extends BaseEntity {
   })
   operator_number: string;
 
-  // @Column({
-  //   type: 'character varying',
-  //   nullable: true,
-  // })
-  // phone: string;
+  @Column({
+    type: 'character varying',
+    nullable: true,
+  })
+  response_story: string;
+
 
   @Column({
     type: 'character varying',

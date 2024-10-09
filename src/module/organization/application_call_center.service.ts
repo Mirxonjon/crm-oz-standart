@@ -54,7 +54,7 @@ export class ApplicationCallCenterServise {
         skip: offset,
         take: pageSize,
         order: {
-          create_data: 'asc',
+          create_data: 'desc',
         },
       }).catch((e) => {
         throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -111,7 +111,7 @@ export class ApplicationCallCenterServise {
         skip: offset,
         take: pageSize,
         order: {
-          create_data: 'asc',
+          create_data: 'desc',
         },
       }).catch((e) => {
         throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -226,7 +226,7 @@ export class ApplicationCallCenterServise {
         skip: offset,
         take: pageSize,
         order: {
-          create_data: 'asc',
+          create_data: 'desc',
         },
       }).catch((e) => {
         throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -325,7 +325,7 @@ export class ApplicationCallCenterServise {
         skip: offset,
         take: pageSize,
         order: {
-          create_data: 'asc',
+          create_data: 'desc',
         },
       }).catch((e) => {
         throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -442,7 +442,7 @@ export class ApplicationCallCenterServise {
         skip: offset,
         take: pageSize,
         order: {
-          create_data: 'asc',
+          create_data: 'desc',
         },
       }).catch((e) => {
         throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -541,7 +541,7 @@ export class ApplicationCallCenterServise {
         skip: offset,
         take: pageSize,
         order: {
-          create_data: 'asc',
+          create_data: 'desc',
         },
       }).catch((e) => {
         throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -582,7 +582,7 @@ export class ApplicationCallCenterServise {
         user: true,
       },
       order: {
-        create_data: 'asc',
+        create_data: 'desc',
         history: {
           create_data: 'desc',
         },
@@ -678,6 +678,7 @@ export class ApplicationCallCenterServise {
         gender: body.gender,
         mfy: body.mfy,
         operator_number: body.operator_number,
+        response_story : body.response_story,
         status_unixTimestamp: `${toUnixTimestamp(new Date())}`,
         street_and_apartment: body.street_and_apartment,
         user: {
@@ -807,6 +808,7 @@ export class ApplicationCallCenterServise {
       executer: body.executer || findaplicationCallCenter.executer,
       gender: body.gender || findaplicationCallCenter.gender,
       mfy: body.mfy || findaplicationCallCenter.mfy,
+      response_story : body.response_story || findaplicationCallCenter.response_story,
       operator_number:
         body.operator_number || findaplicationCallCenter.operator_number,
       street_and_apartment:

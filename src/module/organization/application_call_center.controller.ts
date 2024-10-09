@@ -286,6 +286,10 @@ export class ApplicationCallCenterController {
           type: 'string',
           default: '2024-07-02',
         },
+        response_story : {
+          type: 'string',
+          default: 'response_story',
+        },
       },
     },
   })
@@ -433,6 +437,10 @@ export class ApplicationCallCenterController {
         street_and_apartment: {
           type: 'string',
           default: '2024-07-02',
+        },
+        response_story : {
+          type: 'string',
+          default: 'response_story',
         },
       },
     },

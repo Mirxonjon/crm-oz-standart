@@ -79,6 +79,8 @@ export class CreateApplicationCallCenterDto {
 
   mfy: string
 
+  response_story :string
+
   operator_number: string
 
   street_and_apartment: string
