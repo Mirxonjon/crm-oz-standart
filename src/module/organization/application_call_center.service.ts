@@ -646,6 +646,11 @@ export class ApplicationCallCenterServise {
         throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
       });
     }
+    let status = ApplicationStatuses.New
+    if(body.application_type == `Маълумот бериш` || body.application_type == `Бошқа масалалар`){
+      status = ApplicationStatuses.Processed
+    }
+
 
     const ApplicationCount = await ApplicationCallCenterEntity.count();
 
@@ -661,7 +666,7 @@ export class ApplicationCallCenterServise {
         // crossfields: body.crossfields,
         income_date: body.income_date,
         incoming_number: `UZST/${ApplicationCount + 1}`,
-        status: ApplicationStatuses.New,
+        status: status, //status: ApplicationStatuses.New,
         organization_type: body.organization_type,
         perform_date: body.perform_date,
         email: body.email,
