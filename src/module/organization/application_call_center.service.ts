@@ -672,7 +672,7 @@ export class ApplicationCallCenterServise {
             },
           });
     }
-    console.log(`%UZST-${ApplicationCount + 1}-${currentYear}%`);
+    // console.log(`%UZST-${ApplicationCount + 1}-${currentYear}%`);
     
 
     const createdOrg = await ApplicationCallCenterEntity.createQueryBuilder()
