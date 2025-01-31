@@ -652,7 +652,28 @@ export class ApplicationCallCenterServise {
     }
 
 
-    const ApplicationCount = await ApplicationCallCenterEntity.count();
+    // const ApplicationCount = await ApplicationCallCenterEntity.count();
+
+        const currentYear = new Date().getFullYear();
+
+        let ApplicationCount = await ApplicationCallCenterEntity.count({
+          where: {
+            incoming_number: ILike(`%-${currentYear}%`),
+            IsDraf: 'false',
+          },
+        });
+
+        if (body.IsDraf == 'true') {
+          // console.log('okkk');
+          ApplicationCount = await ApplicationCallCenterEntity.count({
+            where: {
+              incoming_number: ILike(`%-${currentYear}%`),
+              IsDraf: 'true',
+            },
+          });
+    }
+    console.log(`%UZST-${ApplicationCount + 1}-${currentYear}%`);
+    
 
     const createdOrg = await ApplicationCallCenterEntity.createQueryBuilder()
       .insert()
@@ -665,7 +686,7 @@ export class ApplicationCallCenterServise {
         phone: body.phone,
         // crossfields: body.crossfields,
         income_date: body.income_date,
-        incoming_number: `UZST/${ApplicationCount + 1}`,
+        incoming_number: `UZST-${ApplicationCount + 1}-${currentYear}`,
         status: status, //status: ApplicationStatuses.New,
         organization_type: body.organization_type,
         perform_date: body.perform_date,
@@ -683,7 +704,7 @@ export class ApplicationCallCenterServise {
         gender: body.gender,
         mfy: body.mfy,
         operator_number: body.operator_number,
-        response_story : body.response_story,
+        response_story: body.response_story,
         status_unixTimestamp: `${toUnixTimestamp(new Date())}`,
         street_and_apartment: body.street_and_apartment,
         user: {
